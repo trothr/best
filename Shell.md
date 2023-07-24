@@ -20,10 +20,10 @@ to be Bourne-compatible. So you're in good shape coding `#!/bin/sh`.
 In the shell, output of a command can be captured into a variable.
 The historical way to do this is ...
 
-    variable=\`command\`
+    variable=`command`
 
 It's best to use the historical form.
-There's a newer form `variable=\$\(command\)`, but it's possible
+There's a newer form `variable=$(command)`, but it's possible
 to encounter shells where that syntax fails.
 
 
