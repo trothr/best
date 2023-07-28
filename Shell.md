@@ -17,6 +17,9 @@ to be Bourne-compatible. So you're in good shape coding `#!/bin/sh`.
 
 If you really need to use BASH, see "Alternative Interpreters" next.
 
+Again, resist the temptation to code `#!/bin/bash`.
+9 times out of 10 it will work, but that is deceptive success.
+
 ## Alternative Interpreters
 
 The `#!` syntax at the start of a shell script is a "magic number".
