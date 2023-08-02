@@ -59,6 +59,55 @@ C also has an `else` statement which must follow `if`.
     if (somevalue) *statement*;
              else  *otherstatement*;
 
+Some infix operators used in conditional logic are ...
+
+    ==
+    !=
+    <
+    >
+    <=
+    >=
+    && logical and, not to be confused with bitwise and
+    || logical or, not to be confused with bitwise or
+
+## Fundamental Data Types
+
+C is gets you closer to the hardware than most other programming languages,
+apart from assembly language which varies for each instruction set.
+The data types reflect that.
+
+There are three primary data types: `char` for characters, `int` for
+integers, and `float` for non-integers (floating point). `char` is
+actually a very short integer (8 bits) and usually considered unsigned
+though it's not guaranteed to be unsigned unless you say so.
+
+There are modifiers which let you get specific: `short`, `long`,
+`signed`, `unsigned`. You'll have to consult with the documentation
+for your compiler to be sure of the details.
+
+C also makes strong use of pointers.
+A pointer to an item of a particular type is defined by placing
+an asterisk ahead of the variable name. For example, `char *string`
+defines a pointer to a character array (a string) and `string`
+then is the name of the variable. Later in your program, `*string`
+refers to the character at the start of the array.
+
+## Derived Data Types
+
+Data types can be combined in two ways: `struct` and `union`.
+`struct` is seen more often.
+
+A `struct` or structure is a collection of data elements which get
+processed together. One example is a bounded string which can be
+represented as a pointer to the characters in the array and the length
+of the string.
+
+The string example might be coded like this:
+
+    struct mystring { char *bytes; int length; };
+
+Then `mystring.bytes` is the string data and `mystring.length` is the
+number of bytes in the string.
 
 
 
