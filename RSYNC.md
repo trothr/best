@@ -5,10 +5,10 @@ The goal was to have "synchronized" copies of a collection of files
 (original use case, MP3s ripped from CDs). Whenever the "mobile" copy
 was in close proximity with the official copy, updates would be sent.
 
-RSYNC handles the small use case I first considered, and much more.
+RSYNC handles the small use case I first considered, and so much more.
 It has become standard with all of the more widely used Linux distributions
-and is available for most Unix systems and MacOS. It also runs on MS Windows
-via CYGWIN or MINGW.
+and is available for most Unix systems and for MacOS. It also runs on
+MS Windows via CYGWIN or MINGW.
 
 ## Hierarchies
 
@@ -24,7 +24,7 @@ it's capability is most prominent when copying whole hierarchies.
 
 Here is a recommended way to invoke `rsync` ...
 
-   rsync -a -u -x -H -O -S source:/some/path/. target:/some/path/.
+    rsync -a -u -x -H -O -S source:/some/path/. target:/some/path/.
 
 In Enlish, "copy all files under this directory to that directory".
 
@@ -57,6 +57,6 @@ into the other space(s).
 `-S` means to handle sparse files intelligently.
 So-called "sparse" files may contain a high percentage of
 NULL bytes and can be stored more efficiently on many systems
-of that fact is known.
+if that fact is known.
 
 
