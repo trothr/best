@@ -64,14 +64,14 @@ C also has an `else` statement which must follow `if`.
 
 Some infix operators used in conditional logic are ...
 
-    ==
-    !=
-    <
-    >
-    <=
-    >=
-    && logical and, not to be confused with bitwise and
-    || logical or, not to be confused with bitwise or
+    ==  equal
+    !=  not equal
+    <   less than
+    >   greater than
+    <=  less than or equal
+    >=  greater than or equal
+    &&  logical and, not to be confused with bitwise and
+    ||  logical or, not to be confused with bitwise or
 
 Whatever you do, keep it simple.
 
@@ -90,21 +90,59 @@ There are modifiers which let you get specific: `short`, `long`,
 `signed`, `unsigned`. You'll have to consult with the documentation
 for your compiler to be sure of the details.
 
-C also makes strong use of pointers.
-A pointer to an item of a particular type is defined by placing
+C also makes heavy use of pointers.
+A pointer to an item of a particular type is declared by placing
 an asterisk ahead of the variable name. For example, `char *string`
-defines a pointer to a character array (a string) and `string`
-then is the name of the variable. Later in your program, `*string`
-refers to the character at the start of the array.
+defines a pointer to a character array (a string) and `string` then is
+the name of the variable. Later in your program, `*string` refers to
+the character at the start of the array while `string` refers to
+the whole array.
 
-The name of an array can also be used as a pointer variable.
-If we define that character string as ...
+A variable declared as an array (and not as a pointer per se) can also
+be used as a pointer variable. If we define that character string as ...
 
    char string[256];
 
- ... the compiler reserves 256 bytes for character storage but `string`
-can refer to individual characters either with a subscript on the right
-or with an asterisk on the left.
+ ... the compiler reserves 256 bytes for character storage and `string`
+refers to that storage. `string` can also refer to individual characters
+either with a subscript on the right or with an asterisk on the left.
+
+## About Character Strings
+
+For newcomers, C seems to treat character strings differently than other
+data types. But not really. Remember that C takes you as close as possible
+to the hardware without having a unique dialect (like you'd have with
+assembler). C treats a string as a vector of single byte characters
+because that's how strings are processed by the harwdware.
+
+When declaring a string variable, there are two ways. You can declare an
+array of characters or you can declare a pointer to an array of characters.
+The choice of which declaration to use depends on what you want to do.
+If you want a simple string to be passed along to a function, you might ...
+
+    char *dave;
+
+and then assign a value to it
+
+    dave = "How now brown cow";
+
+You can then pass it as an argument to a function:
+
+    printf(dave);   /* ignoring formatting */
+
+In this case, the compiler allocates storage, but it's not for general
+use and will usually be marked read-only.
+
+If you want to manipulate the string, you should declare it as a
+[re]writable buffer.
+
+    char davey[100];
+
+Then load the buffer any way you like. A simple copy would be:
+
+    strcpy(davey,dave);
+
+(Copying characters is not terribly interesting. Sorry about that.)
 
 ## Derived Data Types
 
@@ -216,10 +254,41 @@ Usually such platform-specific coding is moved to some place
 (some other source file) so that your program can be simpler
 and look cleaner. Keep it simple.
 
+## Prototyping of Functions
 
+When writing C, you're defining functions.
+As you write a large application consisting of many functions,
+one part of your code will call another part. The compiler needs to know
+what calling convention or linkage to apply. Often, people simply put
+the called functions ahead of those which call them. But this is
+not always effetive, not always doable, in fact.
 
+You'll often see `main()` at the end of a program while other functions
+are declared ahead of it. It's not bad practice to put `main()` at the
+end, but if you want it at the start, you'll need to provide guidance.
 
+C has a concept of "prototyping".
+You can tell the compiler what a function returns and the types
+of its arguments. Consider one of the stock functions, `write()`.
 
+    rc = write(int fd, void *buffer, int count);
 
+The function returns an integer, the number of bytes written or negative
+for error. Its three arguments are the file descriptor (an integer),
+the I/O buffer (a pointer), and the number of bytes (another integer).
+This function is part of the Unix standard so it is prototyped in the
+`unistd.h` header file.
+
+    int write(int,void*,int);
+
+All you have to do is `#include <unistd.h>`,
+but for your own functions you can explicitly prototype if needed.
+In this example, `write()` is called like this:
+
+    rc = write(fd,buffer,count);
+
+The whole reason for prototyping is simply to let the compiler know
+what kind of value the function will return (in this case an integer)
+and how to stack the arguments.
 
 
