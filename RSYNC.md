@@ -20,7 +20,7 @@ and is by nature a file hierarchy.
 While RSYNC reliably processes individual files,
 it's capability is most prominent when copying whole hierarchies.
 
-# A Simple Recipe
+## A Simple Recipe
 
 Here is a recommended way to invoke `rsync` ...
 
@@ -58,5 +58,21 @@ into the other space(s).
 So-called "sparse" files may contain a high percentage of
 NULL bytes and can be stored more efficiently on many systems
 if that fact is known.
+
+## Update Mode
+
+Repeating the description of the `-u` option: It means "update mode".
+
+Say you have two copies of a hierarchy. You change one file in the
+first copy. You happen to modify another file in the other copy.
+If you copy from the first to the second, you'll blow away the change
+you made to that file in the second set. But if you go the other way,
+you'll lose the changes you made to that file in the first set.
+
+This is where update mode helps. In update mode, RSYNC will not
+overwrite a file on the target end which is newer than its
+counterpart on the source end.
+
+It's not as good as Git, but it helps.
 
 
