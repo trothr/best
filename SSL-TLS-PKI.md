@@ -27,12 +27,11 @@ into the browsers they produce. Users of these browsers then automatically
 "trust" most web sites without special action.
 
 In most cases, a root certificate from the CA is used to "issue" an
-intermediate certificate (usually from the same CA) which in turn is
-used for issuing end or "leaf" certificates. The purpose of the leaf
+intermediate certificate (usually from the same CA) which in turn is used
+for issuing "end entity" or "leaf" certificates. The purpose of the leaf
 certificates is most commonly for server authentication (a server cert)
 but also often for client authentication and authorization (a PIV card
 or CAC or other client cert).
-
 
 ## Issuance and Renewal
 
@@ -42,25 +41,55 @@ must create an asymmetric key pair. The key pair is then used in creation
 of a "certificate request". The request contains the public half of the
 key pair along with X.509 information identifying the server.
 
+PKI certifictes have a range of validity "not before" and "not after".
+The latter is an expiration date. System administrators who support PKI
+must attend to expirations on a regular basis.
+
+There is no technical limit on certificate lifetime, but web server
+certificates are commonly set to expire a year after they are issued.
+Longer lifetimes could be supported except that several prominent 
+providers (notably Apple, Google, and Mozilla) decided to reject
+certificates which last longer than 398 days, ostensibly for security.
+There action (from 2020) forced the hand of the whole consumer internet.
+
+Privately managed certificates can last longer, sometimes *much* longer.
+The rationale for longer-lived certificates is to reduce administrative
+tedium and error-prone human action.
 
 
 
 
 
-CN      Common Name             This is fully qualified domain name that you wish to secure                                                     *.wikipedia.org
-O       Organization Name       Usually the legal name of a company or entity and should include any suffixes such as Ltd., Inc., or Corp.      Wikimedia Foundation, Inc.
-OU      Organizational Unit     Internal organization department/division name                                                                  IT
-L       Locality                Town, city, village, etc. name                                                                                  San Francisco
-ST      State                   Province, region, county or state. This should not be abbreviated (e.g. West Sussex, Normandy, New Jersey).     California
-C       Country                 The two-letter ISO code for the country where your organization is located                                      US
-EMAIL   Email Address           The organization contact, usually of the certificate administrator or IT department
+## X.509
+
+X.509 is the standard of the International Telecommunication Union (ITU)
+which definines certificate structure and usage for Public Key Infrastructure
+(PKI). When we talk about "SSL certificates" or "TLS certificates" we're
+talking about PKI certificates as defined by X.509.
 
 
 
 
-
-
-
+* CN <br/> Common Name <br/>
+This is fully qualified domain name that you wish to secure <br/>
+example: `*.wikipedia.org`
+* O <br/> Organization Name <br/>
+Usually the legal name of a company or entity and should include any suffixes such as Ltd., Inc., or Corp. <br/>
+example: Wikimedia Foundation, Inc.
+* OU <br/> Organizational Unit <br/>
+Internal organization department/division name <br/>
+example: IT
+* L <br/> Locality <br/>
+Town, city, village, etc. name <br/>
+example: San Francisco
+* ST <br/> State <br/>
+Province, region, county or state. This should not be abbreviated (e.g. West Sussex, Normandy, New Jersey). <br/>
+example: California
+* C <br/> Country <br/>
+The two-letter ISO code for the country where your organization is located <br/>
+example: US
+* EMAIL <br/> Email Address <br/>
+The organization contact, usually of the certificate administrator or IT department
 
 
 
@@ -70,6 +99,7 @@ https://en.wikipedia.org/wiki/Transport_Layer_Security
 
 https://en.wikipedia.org/wiki/Certificate_signing_request
 
+https://en.wikipedia.org/wiki/X.509
 
 
 
@@ -78,9 +108,3 @@ https://en.wikipedia.org/wiki/Certificate_signing_request
 
 
 
-
-
-
-
-
-##
