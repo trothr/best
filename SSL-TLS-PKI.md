@@ -70,25 +70,25 @@ talking about PKI certificates as defined by X.509.
 
 
 
-* CN <br/> Common Name <br/>
+* CN - Common Name <br/>
 This is fully qualified domain name that you wish to secure <br/>
 example: `*.wikipedia.org`
-* O <br/> Organization Name <br/>
+* O - Organization Name <br/>
 Usually the legal name of a company or entity and should include any suffixes such as Ltd., Inc., or Corp. <br/>
 example: Wikimedia Foundation, Inc.
-* OU <br/> Organizational Unit <br/>
+* OU - Organizational Unit <br/>
 Internal organization department/division name <br/>
 example: IT
-* L <br/> Locality <br/>
+* L - Locality <br/>
 Town, city, village, etc. name <br/>
 example: San Francisco
-* ST <br/> State <br/>
+* ST - State <br/>
 Province, region, county or state. This should not be abbreviated (e.g. West Sussex, Normandy, New Jersey). <br/>
 example: California
-* C <br/> Country <br/>
+* C - Country <br/>
 The two-letter ISO code for the country where your organization is located <br/>
 example: US
-* EMAIL <br/> Email Address <br/>
+* EMAIL - Email Address <br/>
 The organization contact, usually of the certificate administrator or IT department
 
 
