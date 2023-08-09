@@ -92,6 +92,10 @@ example: US
 The organization contact, usually of the certificate administrator or IT department
 
 
+Some of the above must align with legal attributes of the entity
+owning and operating the server. The certificate authority (CA) may
+enforce certain agreement. Utilities like OpenSSL can programmatically
+enforce agreement of selected fields.
 
 
 
