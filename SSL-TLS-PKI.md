@@ -71,7 +71,7 @@ talking about PKI certificates as defined by X.509.
 
 
 * CN - Common Name <br/>
-This is fully qualified domain name that you wish to secure <br/>
+This is the fully qualified domain name that you wish to secure <br/>
 example: `*.wikipedia.org`
 * O - Organization Name <br/>
 Usually the legal name of a company or entity and should include any suffixes such as Ltd., Inc., or Corp. <br/>
@@ -105,7 +105,7 @@ https://en.wikipedia.org/wiki/Certificate_signing_request
 
 https://en.wikipedia.org/wiki/X.509
 
-
+https://thehackernews.com/2020/09/ssl-tls-certificate-validity-398.html
 
 
 
