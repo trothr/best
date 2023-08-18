@@ -8,7 +8,9 @@ as is found in PGP and PKI to establish secure command sessions between
 computing systems. Most often, SSH is used for connecting from a laptop
 or workstation to a server. It was invented in the mid 1990s as a secure
 alternative to the Unix "R commands" for remote access. It also replaces
-TELNET so it is well suited to session work.
+TELNET so it is well suited to session work. Those familiar with TELNET
+will quickly adapt to using SSH. But SSH, as a service, can also drive
+single commands; it is not limited to "sign-on sessions".
 
 SSH is the most secure way to connect between systems either for
 interactiev access ("shell" access) or to drive specific commands.
@@ -19,9 +21,9 @@ As a protocol, SSH uses similar combinations of symmetric and asymmetric
 cryptography as found in SSL/TLS (PKI as found in support of HTTPS),
 but SSH is a completely different protocol from TLS or SSL.
 
-When connecting with an SSH-enabled tool (e.g., PuTTY or SecureCRT),
-be sure you are in fact using SSH protocol and are using version 2
-of the protocol. You may be able to sign-on with a password,
+When connecting with an SSH-enabled tool (e.g., PuTTY or TERATERM
+or SecureCRT), be sure you are in fact using SSH protocol and are using
+version 2 of the protocol. You may be able to sign-on with a password,
 but signing-on with a public/private key pair is recommended.
 The original SSH1 protocol was replaced by SSH2 several years ago,
 but occasionally you will see references to SSH1. Avoid SSH1.
@@ -43,7 +45,8 @@ utility and protocol.
 ## SSH Clients
 
 There are many SSH client programs available.
-In this document we'll discuss only three: PuTTY, SecureCRT, and OpenSSH.
+In this document we'll discuss only three: PuTTY, SecureCRT, and OpenSSH,
+and we will only discuss the third at any length.
 
 PuTTY is a multi-protocol client and terminal emulator.
 It can connect using wired communication lines (e.g., COM1:),
@@ -117,6 +120,11 @@ all authentication methods work fine for the first hop.
 The following sections discuss primarily OpenSSH or similar
 command-line SSH client operation.
 
+Command-line operation is essential for general automation (scripting).
+The `ssh` command is also common to a wide range of systems (Linux,
+MacOS, and all Unix systems) so it is recommended that all parties
+become familiar with it.
+
 ## Using Key-based Sign-on
 
 When configured to allow it, SSH supports key-based sign-on so that you can
@@ -132,15 +140,16 @@ creating an SSH key pair is as easy as ...
 
     ssh-keygen -t rsa -b 4096 
 
-This command will prompt you for the name of the files to hold your key pair
-(press enter for the default), create your `$HOME/.ssh` directory (if needed),
-and prompt you for a passphrase. The passphrase operates like a password
-but is entirely local, never gets sent to the server, and is associated
-with the private key just created. Protect your private key ($HOME/.ssh/id_rsa),
-but distribute the public key widely ($HOME/.ssh/id_rsa.pub).
+This command will prompt you for the name of the files to hold your
+key pair (press enter for the default), create your `$HOME/.ssh`
+directory (if needed), and prompt you for a passphrase. The passphrase
+operates like a password but is entirely local, never gets sent
+to the server, and is associated with the private key just created.
+Protect your private key (`$HOME/.ssh/id_rsa`) rigorously,
+but distribute the public key widely (`$HOME/.ssh/id_rsa.pub`).
 
 On servers you wish to connect with securely, append the
-public key to the $HOME/.ssh/authorized_keys file. (see below)
+public key to the `$HOME/.ssh/authorized_keys` file. (see below)
 
 SSH steps up the security of interactive command access. An attacker
 could not masqueraed as you unless they got #1 access to the client system
@@ -222,6 +231,10 @@ On Mac systems, this should be run once per sign-on session
 
 On Windows systems, you'll need to bring up a POSIX shell environment,
 using CYGWIN or MINGW or "Git Bash" or similar, or use WSL1 or WSL2.
+
+Using the agent is activated by commands like ...
+
+    ssh -A remotehost
 
 ## Server Key Alerts
 
