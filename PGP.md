@@ -192,6 +192,127 @@ which has been confirmed by people we know. This remains rare.
 The PKI model is much easier for consumers, but
 it is more risky. There's at least 50% more opportunity for failure/leakage.
 
+## Command-Line Operations
+
+The following sections discuss using Gnu Privacy Guard (GPG), one of the
+more popular PGP work-alike utilities. When using PGP with an integrated
+application such as Thunderbird, it's best to use the interface within
+the application. But for operations which need to work on discrete files
+or where there is no formal integration, use command-line tools like GPG.
+
+GPG (like most PGP implementations) has the concept of a "key ring" and
+maintains two files: one for public keys and one (smaller) for private keys.
+
+## Generate a Key Pair
+
+    gpg --gen-key
+
+Enter the command and respond to the prompts:
+
+    1 - RSA and RSA (default)
+    4096 bits
+    0 - Key does not expire at all
+
+RSA remains the most common asymmetric algorithm.
+
+Be sure and use the largest key size possible, 4096 bits in this case.
+
+Key expiration can be counter productive.
+It's better to create a key revokation file.
+
+    Real name: human readable
+    Email address: reachable mailbox or identity
+    (you can leave the comment field blank)
+
+    Enter passphrase:
+
+Your name and email address are vital if this key will be used for email.
+Even if this key will only be used for files and/or signing, it should
+have an identity associated with it.
+
+For some keys, you can use a non-working email address or can use
+a string in the email field which is not an email address at all.
+But the key should be readily identifyable.
+
+## Importing and Exporting Keys
+
+Use the following commands to import and export keys.
+
+    gpg --armor --export [keyid] > [keyfile]
+    gpg --send-keys [keyid]                 export keys to a key server
+    gpg --import [keyfile]                  import (and merge) keys
+    gpg --recv-keys [keyid]                 import keys from a key server
+    gpg --list-keys [keyid]                 show public keys
+    gpg --list-sec                          show your secret keys (your private keys)
+
+The `--armor` option applies "ASCII armor" to otherwise binary content.
+For the export command, it results in an exported key file which can be
+passed around as plain text (copy-n-pasted, embedded in email, etc).
+
+There are a number of PGP key servers available publicly.
+You can upload keys to and download keys from these servers.
+Export is to "send" as import is to "recv".
+
+## Encrypting and Decrypting
+
+Once you have (at least) a public key, you can encrypt.
+For any public key used to encrypt a file, you'll need the private
+(secret) half to decrypt that file.
+
+    gpg --decrypt [file]
+    gpg --encrypt [file]
+
+When decrypting, you'll be prompted for the pass phrase of the
+appropriate secret key. If you have a GPG Agent running then you can
+enter your pass phrase less frequently, sometimes only once per session.
+
+## Signing and Verifying Files
+
+Use the following commands to sign a file,
+confirming its authenticity to others who have your public key.
+
+    gpg --sign [file]                       make a signature
+    gpg --detach-sign [file]                make a signature in a separate file
+    gpg --verify [signedfile]               verify a signature on a signed file
+
+It is common to have the signature in a separate file.
+That's the purpose of `--detach-sign`.
+
+## Signing Keys
+
+You can sign keys on your public key ring.
+When you sign someone's key and then export it,
+people who know you can "trust" that person's key
+much like they would trust the authenticity of a file that you sign.
+
+    gpg --sign-key [keyid]
+    gpg --list-sigs 0x7a8e3834dd0d95fa
+    gpg --list-sigs             list keys and signatures
+    gpg --fingerprint           list keys and fingerprints
+
+See above for exporting signed keys.
+(Exported keys will contain all signatures.)
+
+## GPG Options
+
+When ecrypting, you must specify at least one recipient.
+Keep in mind that this "recipient" is not necessarily one who
+will receive a message but is simply one who can decrypt the file.
+
+     --recipient [keyid]       encrypt for [keyid]
+
+You can have any number of recipients. Under the covers,
+GPG will create a random symmetric session key and will encrypt
+that key with the various asymmetric public keys of the recipients.
+
+GPG operations which produce output can be directed to a named file.
+
+     --output [file]           use as output file
+
+Use the `--verbose` option to get more details from GPG.
+
+     --verbose                 verbose
+
 ## references
 
 https://en.wikipedia.org/wiki/RSA_(cryptosystem)
