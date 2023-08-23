@@ -21,34 +21,38 @@ There is an intriguing story about Phil Zimmerman and PGP from the
 1990s which is beyond the scope of this document. But look for it,
 if only for the entertainment value, or perhaps as a cautionary tale.
 
-## Rivest, Shamir, Adleman
+## Rivest, Shamir, Adleman, and Cocks
 
-In the late 1970s, Ron Rivest, Adi Shamir, and Leonard Adleman then at
-the Massachusetts Institute of Technology (MIT) sought come up with
-a function that was hard to invert. They were inspired by the work of
-Whitfield Diffie and Martin Hellman who had suggested the idea in 1976
-of an asymmetric public/private key cryptosystem.
+In the late 1970s, Ron Rivest, Adi Shamir, and Leonard Adleman (the R,
+S, and A of RSA) then at the Massachusetts Institute of Technology (MIT)
+sought come up with a function that was hard to invert. They were inspired
+by the work of Whitfield Diffie and Martin Hellman who had suggested the
+idea in 1976 of an asymmetric public/private key cryptosystem.
 
-The heart of the system is that a "message" encrypted with the public key
-can only be decrypted with the private key (the secret key). Further, one
-cannot easily determine one key from the other. The public and private
-keys are mathematical counterparts, created at the same time, but not
-easily guessed from each other.
+Prior to the development of asymmetric cryptography, all ciphers were
+symmetric, meaning that the "key" which locked a message was the same
+"key" as unlocked it. The heart of the new system was that a "message"
+encrypted with the *public* key could only be decrypted with the
+*private* key (the secret key). Further, one cannot easily determine
+one key from the other. The public and private keys are mathematical
+counterparts, created at the same time, but not easily guessed
+from each other.
 
 In the early 1970s, several years ahead of Rivest, Shamir, and Adleman,
 Clifford Cocks and others then at UK GCHQ derived a similar cryptosystem.
 Later, Cocks also developed Identity-Based Encryption (IBE).
 
-Today there are several asymmetric crypto algorithms, but RSA remains
-in heavy use.
+Today there are several asymmetric crypto algorithms,
+but RSA remains in broad use.
 
 ## Asymmetric Crypto
 
 With symmetric cryptography, as with traditional keys and locks,
-as well as such things as passwords, there is a serious distribution
-challenge. How do you get the key to the person who needs it?
-There is also the problem of copying. The same key which locks the
-message or file can unlock it. The file can be decrypted, modified,
+as well as such things as passwords, there is a serious challenge
+regarding distribution. How do you get the key to the right person?
+How do you ensure that the key is not intercepted or copied?
+Symmetrically, the same key which locks the message or file can unlock,
+just like a password on a ZIP file. The file can be decrypted, modified,
 and then re-encrypted, and no-one would be the wiser.
 
 With asymmetric cryptography, there is still the need to distribute,
@@ -239,11 +243,11 @@ But the key should be readily identifyable.
 Use the following commands to import and export keys.
 
     gpg --armor --export [keyid] > [keyfile]
-    gpg --send-keys [keyid]                 export keys to a key server
-    gpg --import [keyfile]                  import (and merge) keys
-    gpg --recv-keys [keyid]                 import keys from a key server
-    gpg --list-keys [keyid]                 show public keys
-    gpg --list-sec                          show your secret keys (your private keys)
+    gpg --send-keys [keyid]                     export keys to a key server
+    gpg --import [keyfile]                      import (and merge) keys
+    gpg --recv-keys [keyid]                     import keys from a key server
+    gpg --list-keys [keyid]                     show public keys
+    gpg --list-sec                              show your secret keys (your private keys)
 
 The `--armor` option applies "ASCII armor" to otherwise binary content.
 For the export command, it results in an exported key file which can be
@@ -271,12 +275,16 @@ enter your pass phrase less frequently, sometimes only once per session.
 Use the following commands to sign a file,
 confirming its authenticity to others who have your public key.
 
-    gpg --sign [file]                       make a signature
-    gpg --detach-sign [file]                make a signature in a separate file
-    gpg --verify [signedfile]               verify a signature on a signed file
+    gpg --sign [file]                           make a signature
+    gpg --detach-sign [file]                    make a signature in a separate file
+    gpg --verify [signedfile]                   verify a signature on a signed file
 
 It is common to have the signature in a separate file.
 That's the purpose of `--detach-sign`.
+
+When verifying a file with a detached signature, name the signature file
+(typically `.sig` or `.asc`) not the signed file, and `gpg` will find
+the signed file by removing the filename extension of the signature file.
 
 ## Signing Keys
 
@@ -285,10 +293,9 @@ When you sign someone's key and then export it,
 people who know you can "trust" that person's key
 much like they would trust the authenticity of a file that you sign.
 
-    gpg --sign-key [keyid]
-    gpg --list-sigs 0x7a8e3834dd0d95fa
-    gpg --list-sigs             list keys and signatures
-    gpg --fingerprint           list keys and fingerprints
+    gpg --sign-key [keyid]                      sign a key (rather than a file)
+    gpg --list-sigs [keyid]                     list keys and signatures
+    gpg --fingerprint                           list keys and fingerprints
 
 See above for exporting signed keys.
 (Exported keys will contain all signatures.)
@@ -299,19 +306,20 @@ When ecrypting, you must specify at least one recipient.
 Keep in mind that this "recipient" is not necessarily one who
 will receive a message but is simply one who can decrypt the file.
 
-     --recipient [keyid]       encrypt for [keyid]
+    --recipient [keyid]                         encrypt for [keyid]
 
 You can have any number of recipients. Under the covers,
 GPG will create a random symmetric session key and will encrypt
 that key with the various asymmetric public keys of the recipients.
+It will then encrypt the payload (file or message) with the session key.
 
 GPG operations which produce output can be directed to a named file.
 
-     --output [file]           use as output file
+    --output [file]                             use a specific output file
 
 Use the `--verbose` option to get more details from GPG.
 
-     --verbose                 verbose
+    --verbose                                   verbose
 
 ## references
 
