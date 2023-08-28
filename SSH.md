@@ -2,15 +2,17 @@
 
 SSH is "Secure Shell" and is both a protocol and a utility.
 As a utility, there are several implementations, both commercial and "free".
+In this document, we discuss command-line SSH, primarily the OpenSSH
+implementation, which is the most widely recognized reference.
 
-SSH protocol uses the same combined symmetric and asymmetric cryptography
-as is found in PGP and PKI to establish secure command sessions between
-computing systems. Most often, SSH is used for connecting from a laptop
-or workstation to a server. It was invented in the mid 1990s as a secure
-alternative to the Unix "R commands" for remote access. It also replaces
-TELNET so it is well suited to session work. Those familiar with TELNET
-will quickly adapt to using SSH. But SSH, as a service, can also drive
-single commands; it is not limited to "sign-on sessions".
+SSH protocol uses the same combined *symmetric* and *asymmetric*
+cryptography as is found in PGP and PKI to establish secure command
+sessions between computing systems. Most often, SSH is used for connecting
+from a laptop or workstation to a server. It was invented in the mid 1990s
+as a secure alternative to the Unix "R commands" for remote access. It also
+replaces TELNET so it is well suited to session work. Those familiar with
+TELNET will quickly adapt to using SSH. But SSH, as a service, can also
+drive single commands; it is not limited to "sign-on sessions".
 
 SSH is the most secure way to connect between systems either for
 interactiev access ("shell" access) or to drive specific commands.
@@ -42,7 +44,7 @@ the client end, with possible loss of productivity. The ability to adjust
 these things via configuration demonstrates the power of SSH as secure
 utility and protocol.
 
-## SSH Clients
+## SSH Client Programs
 
 There are many SSH client programs available.
 In this document we'll discuss only three: PuTTY, SecureCRT, and OpenSSH,
@@ -65,11 +67,16 @@ It is the most popular SSH client and server for Linux and Unix systems.
 Unlike PuTTY, the SSH client in the OpenSSH package does not provide
 terminal emulation. It runs within a command shell by way of whatever
 terminal emulator you choose. The `ssh` command provides a powerful
-means of connecting and also of scripting.
+means of connecting and also of scripting. Some variations of the
+`ssh` command include ...
 
-All three of these SSH clients can forward a TCP port from the remote
-(server) to the local (client) end, or vice versa. Both can forward
-X11 traffic. Both can forward SSH agent service.
+    ssh remotehost
+    ssh remoteuser@remotehost
+    ssh -l remoteuser remotehost
+
+All of the SSH clients mentioned can forward a TCP port from the remote
+(server) to the local (client) end, or vice versa. Both can forward X11
+traffic. Both can forward SSH agent service.
 
 Of the three, the OpenSSH client program `ssh` is the most powerful
 for automation and scripting. The `ssh` command underpins the `scp`
@@ -96,8 +103,8 @@ such as single-signon and (like traditional password) are often helpful
 for initial connections.
 
 Of these, only the public key methods can be forwarded by an SSH agent.
-SSH agent forwarding is both highly practical and highly secure
-and offers improved productivity. To use SSH agent credential forwarding,
+SSH agent forwarding is both highly practical and highly secure and
+offers improved productivity. To use SSH agent credential forwarding,
 you will need to launch an SSH agent on your laptop or workstation
 and then run SSH clients in a way that they can communicate with it.
 
@@ -115,7 +122,7 @@ System B might not even be reachable from your client.
 In absense of agent credential forwarding,
 all authentication methods work fine for the first hop.
 
-##
+## Considering Command-Line
 
 The following sections discuss primarily OpenSSH or similar
 command-line SSH client operation.
@@ -130,7 +137,7 @@ become familiar with it.
 When configured to allow it, SSH supports key-based sign-on so that you can
 connect without use of a password. Instead of a password, your client-side
 private key supplies the credentials to authenticate you. This is considered
-by many to be more secure than using passwords of any length or form.
+by most to be more secure than using passwords of any length or form.
 Your client-side private key is protected by a passphrase.
 
 ## Client Side: Creating a Key Pair
@@ -138,7 +145,7 @@ Your client-side private key is protected by a passphrase.
 On systems with OpenSSH (including Unix, Linux, and CYGWIN),
 creating an SSH key pair is as easy as ... 
 
-    ssh-keygen -t rsa -b 4096 
+    ssh-keygen -t rsa -b 4096 -C identitier
 
 This command will prompt you for the name of the files to hold your
 key pair (press enter for the default), create your `$HOME/.ssh`
@@ -147,6 +154,10 @@ operates like a password but is entirely local, never gets sent
 to the server, and is associated with the private key just created.
 Protect your private key (`$HOME/.ssh/id_rsa`) rigorously,
 but distribute the public key widely (`$HOME/.ssh/id_rsa.pub`).
+
+The public half of your SSH keypair looks something like ...
+
+    ssh-rsa fdsafdsafdsafdsfdsfdsafdsafda identifier
 
 On servers you wish to connect with securely, append the
 public key to the `$HOME/.ssh/authorized_keys` file. (see below)
@@ -185,13 +196,13 @@ remote machines (servers).
 
 `ssh-copy-id` is a script that uses `ssh` to log into a remote machine
 (presumably using a login password) and then add public keys
-by appending them to the remote user's `~/.ssh/authorized_keys` file.
+by appending them to the remote user's `$HOME/.ssh/authorized_keys` file.
 The file and directory are created if necessary.
 
 `ssh-copy-id` is convenient, but not strictly needed.
-You can manually concatenate keys to `~.ssh/authorized_keys` (see above).
+You can manually concatenate keys to `$HOME/.ssh/authorized_keys` (see above).
 
-### `ssh-agent`
+## `ssh-agent`
 
 You can launch an SSH agent manually,
 but most Linux and Mac systems do so automatically when you sign-on.
@@ -231,12 +242,16 @@ On Mac systems, this should be run once per sign-on session
 
 On Windows systems, you'll need to bring up a POSIX shell environment,
 using CYGWIN or MINGW or "Git Bash" or similar, or use WSL1 or WSL2.
+The following command sequence establishes an agent umbrella:
+
+    exec ssh-agent $SHELL
+    ssh-add
 
 Using the agent is activated by commands like ...
 
     ssh -A remotehost
 
-## Server Key Alerts
+## Server Key Alerts and First Contact
 
 SSH not only authenticates you to the target server. It also authenticates
 the target server to you. This is important because it minimizes the risk
