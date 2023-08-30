@@ -71,7 +71,7 @@ run faster. The former ensures authenticity of the recipient and often
 Whether purely common sense or a spark of genius, Zimmerman combined
 symmetric crypto with asymmetric. The bulk of the message (or file)
 in PGP is protected by a symmetric "session key". The session key is
-protected with tye asymmetric key. This minimizes the load on the
+protected with the asymmetric key. This minimizes the load on the
 slower algorithm to decrypting only a small body, the session key,
 which is typically less than 100 bytes.
 
