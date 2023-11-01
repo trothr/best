@@ -5,11 +5,16 @@ This markdown document discusses some best practices for shell scripting.
 ## `/bin/sh`
 
 Always start generic shell scripts with `#!/bin/sh`.
+
 As I write, in the early 2020s, I see a lot of `#!/bin/bash`.
 While BASH is an excellent shell, and my own preferred shell
 for interactive work, it's not always right for scripting.
 It's usually *not needed* for scripting. There are few things BASH
-can do that other Bourne-compatible shells cannot also do.
+can do that other Bourne-compatible shells cannot also do, but unless
+you really need those features, don't introduce a BASH requirement.
+
+We're talking about scripting here.
+As a login shell, or for command processing, *yes*, BASH is way better.
 
 On POSIX systems (Unix, Linux, MacOS, and things like them)
 `/bin/sh` is required by the system specification and is required
@@ -23,15 +28,16 @@ Again, resist the temptation to code `#!/bin/bash`.
 ## Alternative Interpreters
 
 The `#!` syntax at the start of a shell script is a "magic number".
-That particular sequence tells the operating system "this is a script".
-Immediately after that should be the fully-qualified path to the
-interpreter of interest. (If the system does not recognize the filename
-then the script may fail or the system will pass the script to `/bin/sh`.)
+That particular sequence "pound bang" tells the operating system
+"this is a script". Immediately after that should be the fully-qualified
+path to the interpreter of interest. (If the system does not recognize
+the filename coded then the script may fail or the system will pass
+the script to `/bin/sh`.)
 
-Many interpreted languages can be invoked just by the name of
-the script which is written in that language. Perl, for example, can be
-indicated with `#!/usr/bin/perl`. That presumes Perl is installed
-and also that it resides at `/usr/bin/perl`. There is a better way.
+Many interpreted languages can be invoked just by the name of the script
+which is written in that language. Perl, for example, can be indicated
+with `#!/usr/bin/perl`. That presumes Perl is installed and also that it
+resides at `/usr/bin/perl`. There is a better way.
 
 The `PATH` variable lists directories where your command shell should
 look for executable commands and programs. Better than hard-coding
@@ -39,15 +45,15 @@ the fully-qualified path to the interpreter you want, try this ...
 
     #!/usr/bin/env perl
 
-One of the functions of `/usr/bin/env` is to find the named
-interpreter and then pass the script to it. So if you wanted BASH,
-you would code ...
+One of the functions of `/usr/bin/env` is to find the named interpreter
+in a directory listed in `$PATH` and then pass the script to it. So if
+you wanted BASH, you would code ...
 
     #!/usr/bin/env bash
 
 The system would then search your `PATH` variable, find `bash`
-(which could be in several different locations), and passes the script
-along to it.
+(which could be in any of several different locations),
+and passes the script along to it.
 
 This method works for other languages than Perl and BASH,
 like Python and Rexx.
@@ -60,8 +66,8 @@ The historical way to do this is ...
     variable=`command`
 
 It's best to use the historical form.
-There's a newer form `variable=$(command)`, but it's possible
-to encounter shells where that syntax fails.
+There's a newer form `variable=$(command)`, but there are some shells
+where that syntax fails. So go with the older syntax even if it's ugly.
 
 ## Clean Conditionals
 
@@ -90,5 +96,13 @@ from common tools like AWK, SED, GREP, and XARGS. Discussion of these
 is beyond the scope of this document, but do learn about those.
 
 And there is a better pipeline, but that's another story
+
+## More to Come
+
+We need to talk about profiling.
+
+We need to discuss the `exec` command.
+
+We also need to talk about "sourcing" versus invoking or executing.
 
 
