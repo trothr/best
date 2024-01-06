@@ -26,7 +26,7 @@ RSYNC is typically used for synchronizing files between different systems
 but can also be used for synchronizing (or simply copying) files between
 two folders on the same system. 
 
-Example RSYNC usage might be something like ... 
+Example RSYNC usage for copying a hierarchy might be something like ...
 
     rsync -av source/. target/.
 
@@ -48,34 +48,32 @@ separated in this document for clarity, so the above is actually ...
 
 `-v` stands for "verbose mode" (also below)
 
-
 ## Options
 
 The `-a` option (archive) expands to `-rlptgoD`. These in turn mean ...
 
-`-r` for "recursive" which means follow sub-directories
+`-r` for recursion which means follow sub-directories
 
 `-l` to copy symbolic links as symbolic links
 
 `-p` to "preserve permissions"
 
-`-t` to "preserve timestamps", specifically modification times
+`-t` to preserve timestamps, specifically modification times
 (file creation times and file access times are not maintained)
 
-`-g` for "preserve group" ownership
+`-g` for preserve group ownership
 
-`-o` for "perserve owner" (if you have privilege to do so
+`-o` for perserve owner (if you have privilege to do so
 and you don't already own both copies)
 
 `-D` for `--devices` and `--specials` (not always needed but harmless)
 
-
 More Options
-
 
 `-u` for "update mode" which is discussed at length it its own section below
 
-`-H` causes RSYNC to preserve hard links, if possible.
+`-H` causes RSYNC to preserve hard links, if possible (within the hierarchy).
+
 Most Unix filesystems have the concept that two files (as seen in
 directory listings) can refer to the same physical entity. For a detailed
 explanation, search for "inode" in various internet documents.
@@ -86,20 +84,22 @@ directory on the target end as a directory. (It forces RSYNC to not
 remove a sym-link to a directory if the same object on the source end
 is an actual directory.)
 
-`-O` causes RSYNC to "omit directory times".
-This allows that a directory on the target end which gets new files
-will have a timestamp reflecting the change. RSYNC will not forcibly
+`-O` causes RSYNC to "omit directory times". <br/>
+This allows for a directory on the target end which gets new files
+to have a timestamp reflecting the change. RSYNC will not forcibly
 reset the timestamp on target directories to match those in the source.
+(Timestamps on *files* are still preserved if indicated with `-t`.)
 
 `-S` means to handle sparse files intelligently.
+
 Sparse files are commonly used as a means of saving physical storage.
 A file which has long runs of NULL characters may be stored in the
 filesystem using less data blocks. (Since the data blocks have the
 exact same NULL content.)
 
-`-x` tells RSYNC to stay within one filesystem.
-That is, if the hierarchy being copied has other filesystems,
-or "shares", mounted below its top level, RSYNC will not descend
+`-x` tells RSYNC to stay within one filesystem. <br/>
+That is, if the hierarchy being copied has other filesystems
+or "shares" mounted below its top level, RSYNC will not descend
 into the other spaces.
 
 `-v` stands for "verbose mode" and causes progress and other details
@@ -113,7 +113,7 @@ Here is a recommended way to invoke `rsync` ...
 
 In Enlish, "copy all files under this directory to that directory".
 
-This will reliably update a file tree on the source end into an
+This will reliably update a file tree from the source end into an
 equivalent tree on the target end. Either "source" or "target" must be
 the local system (where the `rsync` command is issued) and should be
 left off the path specifier for that end.
@@ -143,5 +143,21 @@ In update mode, RSYNC will not overwrite a file on the target end
 which is newer than its counterpart on the source end.
 
 It's not as good as Git, but it helps.
+
+## Remote Copy
+
+One end or the other of the RSYNC command can be remote.
+
+    rsync [options] remote:source/. target/.
+
+    rsync [options] source/. remote:target/.
+
+Oddly, RSYNC does not support both ends being remote.
+(But both ends can be local.)
+
+## Using Secure Shell
+
+RSYNC will use SSH to make the connection,
+so remote can be of the form `user@host`.
 
 
