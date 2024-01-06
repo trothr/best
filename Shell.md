@@ -105,4 +105,9 @@ We need to discuss the `exec` command.
 
 We also need to talk about "sourcing" versus invoking or executing.
 
+Also, check out this reference contributed by John Cook: <br/>
+https://www.shellcheck.net/
+
+<!-- https://github.com/berthubert/googerteller -->
+
 
